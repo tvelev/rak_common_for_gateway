@@ -280,7 +280,13 @@ do_get_rpi_model()
             model=4
         fi
     fi
-
+     # Added for support of the "Raspberry Pi 5"
+    if [ $model -eq 255 ]; then
+        text=`tr -d '\0' </proc/device-tree/model | grep -a 'Pi 5'`
+        if [ ! -z "$text" ]; then
+            model=5
+        fi
+    fi
     echo $model
 }
 
