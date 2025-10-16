@@ -13,7 +13,15 @@ if [ $UID != 0 ]; then
     exit 1
 fi
 
-systemctl disable hciuart
+# --- Add skip if HCIUART is not presented ---
+set +e  # temporarily turn off 'exit on error'
+if systemctl disable hciuart 2>/dev/null; then
+    echo "hciuart service disabled."
+else
+    echo "hciuart service not found or could not be disabled. Skipping..."
+fi
+set -e  # turn it back on
+# -----------------------------------------------
 
 apt install git ppp dialog jq minicom monit i2c-tools -y
 
